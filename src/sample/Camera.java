@@ -42,7 +42,7 @@ public class Camera {
         width = (int) canvas.getWidth();
         height = (int) canvas.getHeight();
         channels = frame.channels();
-//        byteArray = new byte[width * height * channels];
+        byteArray = new byte[width * height * channels];
 
     }
 
@@ -50,7 +50,7 @@ public class Camera {
         if (camera.isOpened()){
             int width = this.width;
             int height = this.height;
-            byteArray = new byte[width * height * channels];
+//            byteArray = new byte[width * height * channels];
             camera.read(frame);
             Imgproc.resize(frame, frame, new Size(width, height));
             frame.get(0, 0, byteArray);

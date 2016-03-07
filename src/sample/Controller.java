@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -29,6 +30,7 @@ public class Controller {
     Camera camera;
     final PixelFormat<ByteBuffer> pixelFormat = PixelFormat.getByteRgbInstance();
     ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    Future<?> future;
 
     @FXML
     void action(ActionEvent event) {
@@ -42,13 +44,13 @@ public class Controller {
         camera = new Camera();
         canvas = camera.getCanvas();
         root.getChildren().add(canvas);
+        root.heightProperty().addListener(e->pause());
+        future = service.scheduleAtFixedRate((Runnable) () -> camera.Process(),1000, 35, TimeUnit.MILLISECONDS);
 
-        service.scheduleAtFixedRate((Runnable) () -> camera.Process(),1000, 35, TimeUnit.MILLISECONDS);
+    }
 
-
-
-
-
-
+    void pause(){
+        future.cancel(true);
+        future = service.scheduleAtFixedRate((Runnable) () -> camera.Process(),1000, 35, TimeUnit.MILLISECONDS);
     }
 }
