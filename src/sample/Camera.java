@@ -48,8 +48,8 @@ public class Camera {
 
     public void Process(){
         if (camera.isOpened()){
-            int width = this.width;
-            int height = this.height;
+//            int width = this.width;
+//            int height = this.height;
 //            byteArray = new byte[width * height * channels];
             camera.read(frame);
             Imgproc.resize(frame, frame, new Size(width, height));
