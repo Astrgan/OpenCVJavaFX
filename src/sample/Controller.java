@@ -38,15 +38,13 @@ public class Controller {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         camera = new Camera();
         canvas = camera.getCanvas();
-        canvas.setWidth(730);
-        canvas.setHeight(700);
         root.getChildren().add(canvas);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 camera.Process();
             }
-        },35,35);
+        },1000,35);
 
 
 

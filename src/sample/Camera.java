@@ -15,24 +15,32 @@ import java.nio.ByteBuffer;
  */
 public class Camera {
 
-    Canvas canvas;
+    CanvasResizable canvas;
     PixelWriter pixelWriter;
     Mat frame;
     VideoCapture camera;
     final PixelFormat<ByteBuffer> pixelFormat = PixelFormat.getByteRgbInstance();
     byte[] byteArray;
+    int width,height, channels;
 
     public Camera() {
-        canvas = new Canvas();
+        canvas = new CanvasResizable();
         frame = new Mat();
         pixelWriter = canvas.getGraphicsContext2D().getPixelWriter();
         camera = new VideoCapture(0);
+        canvas.heightProperty().addListener(e -> newSize());
+        canvas.widthProperty().addListener(e -> newSize());
+        camera.read(frame);
 
 
     }
 
     void newSize(){
-
+        System.out.println("Width: " + canvas.getWidth() + " Height:  " + canvas.getHeight());
+        width = (int) canvas.getWidth();
+        height = (int) canvas.getHeight();
+        channels = frame.channels();
+        byteArray = new byte[width * height * channels];
     }
 
     public void Process(){
