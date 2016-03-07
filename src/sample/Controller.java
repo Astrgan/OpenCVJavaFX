@@ -17,6 +17,9 @@ import org.opencv.videoio.VideoCapture;
 import java.nio.ByteBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Controller {
 
@@ -25,7 +28,7 @@ public class Controller {
     Canvas canvas;
     Camera camera;
     final PixelFormat<ByteBuffer> pixelFormat = PixelFormat.getByteRgbInstance();
-    Timer timer = new Timer();
+    ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
     @FXML
     void action(ActionEvent event) {
@@ -40,12 +43,10 @@ public class Controller {
         canvas = camera.getCanvas();
         root.getChildren().add(canvas);
 
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                camera.Process();
-            }
-        },1000,35);
+        service.scheduleAtFixedRate((Runnable) () -> camera.Process(),1000, 35, TimeUnit.MILLISECONDS);
+
+
+
 
 
 
