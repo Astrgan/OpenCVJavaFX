@@ -39,6 +39,7 @@ public class Controller {
         camera = new Camera();
         canvas = camera.getCanvas();
         root.getChildren().add(canvas);
+
         timer.schedule(new TimerTask() {
             @Override
             public void run() {

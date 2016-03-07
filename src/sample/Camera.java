@@ -22,6 +22,7 @@ public class Camera {
     final PixelFormat<ByteBuffer> pixelFormat = PixelFormat.getByteRgbInstance();
     byte[] byteArray;
     int width,height, channels;
+    boolean flag = true;
 
     public Camera() {
         canvas = new CanvasResizable();
@@ -31,23 +32,27 @@ public class Camera {
         canvas.heightProperty().addListener(e -> newSize());
         canvas.widthProperty().addListener(e -> newSize());
         camera.read(frame);
-
+        byteArray = new byte[width * height * channels];
 
     }
 
     void newSize(){
-        System.out.println("Width: " + canvas.getWidth() + " Height:  " + canvas.getHeight());
+//        System.out.println("Width: " + canvas.getWidth() + " Height:  " + canvas.getHeight());
+
         width = (int) canvas.getWidth();
         height = (int) canvas.getHeight();
         channels = frame.channels();
-        byteArray = new byte[width * height * channels];
+//        byteArray = new byte[width * height * channels];
+
     }
 
     public void Process(){
         if (camera.isOpened()){
+            int width = this.width;
+            int height = this.height;
+            byteArray = new byte[width * height * channels];
             camera.read(frame);
-            Imgproc.resize(frame, frame, new Size(canvas.getWidth(), canvas.getHeight()));
-            byte[] byteArray = new byte[(int) frame.total() * frame.channels()];
+            Imgproc.resize(frame, frame, new Size(width, height));
             frame.get(0, 0, byteArray);
             pixelWriter.setPixels(0, 0, frame.width(), frame.height(), pixelFormat, byteArray, 0, frame.width() * frame.channels());
         }else {
